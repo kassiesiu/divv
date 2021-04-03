@@ -1,9 +1,10 @@
+import { Moment } from 'moment';
 import React from 'react';
 import { Pressable, StyleSheet } from 'react-native';
 import { Text, View } from '../Themed';
 
 interface DayProps {
-  day: number;
+  date: Moment;
   selected: boolean;
   onPress: Function;
 }
@@ -33,18 +34,16 @@ export default class Day extends React.Component<DayProps, any> {
   }
 
   press() {
-    this.props.onPress(this.props.day);
+    this.props.onPress(this.props.date);
   }
 
   render() {
-    return this.props.day ? (
+    return (
       <Pressable style={styles.day} onPress={this.press}>
         <View style={this.props.selected && styles.selected}>
-          <Text>{this.props.day}</Text>
+          <Text>{this.props.date.date()}</Text>
         </View>
       </Pressable>
-    ) : (
-      <View style={styles.day} />
-    );
+    )
   }
 }

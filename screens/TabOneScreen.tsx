@@ -1,9 +1,11 @@
 import React from 'react';
 import moment, { Moment } from 'moment';
 import Calendar from '../components/Calendar';
+import { Text, View } from '../components/Themed';
 
 interface State {
   selectedDate: Moment;
+  displayedDate: Moment;
 }
 
 export default class TabOneScreen extends React.Component<any, State> {
@@ -11,6 +13,7 @@ export default class TabOneScreen extends React.Component<any, State> {
     super(props);
     this.state = {
       selectedDate: moment(),
+      displayedDate: moment(),
     };
 
     this.back = this.back.bind(this);
@@ -20,7 +23,7 @@ export default class TabOneScreen extends React.Component<any, State> {
 
   back() {
     this.setState((prevState) => ({
-      selectedDate: prevState.selectedDate
+      displayedDate: prevState.displayedDate
         .subtract(1, 'months')
         .startOf('month'),
     }));
@@ -28,24 +31,29 @@ export default class TabOneScreen extends React.Component<any, State> {
 
   forward() {
     this.setState((prevState: State) => ({
-      selectedDate: prevState.selectedDate.add(1, 'months').startOf('month'),
+      displayedDate: prevState.displayedDate.add(1, 'months').startOf('month'),
     }));
   }
 
-  pressDate(day: number) {
-    this.setState((prevState: State) => ({
-      selectedDate: prevState.selectedDate.set('date', day),
-    }));
+  pressDate(date: Moment) {
+    this.setState({ selectedDate: date });
   }
 
   render() {
     return (
-      <Calendar
-        selectedDate={this.state.selectedDate}
-        onBack={this.back}
-        onForward={this.forward}
-        onPressDate={this.pressDate}
-      />
+      <View>
+        <Calendar
+          selectedDate={this.state.selectedDate}
+          displayedDate={this.state.displayedDate}
+          onBack={this.back}
+          onForward={this.forward}
+          onPressDate={this.pressDate}
+        />
+        <Text>
+          Selected Date:
+          {this.state.selectedDate.format('MM/DD/YYYY')}
+        </Text>
+      </View>
     );
   }
 }

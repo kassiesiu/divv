@@ -1,14 +1,15 @@
-import React from 'react';
-import moment, { Moment } from 'moment';
-import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome';
 import { faArrowLeft, faArrowRight } from '@fortawesome/free-solid-svg-icons';
+import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome';
+import moment, { Moment } from 'moment';
+import React from 'react';
 import { Pressable, StyleSheet } from 'react-native';
 import GestureRecognizer from 'react-native-swipe-gestures';
-import { Text, View } from '../Themed';
 import Day from '../Day';
+import { Text, View } from '../Themed';
 
 interface CalendarProps {
   selectedDate: Moment;
+  displayedDate: Moment;
   onBack: Function;
   onForward: Function;
   onPressDate: Function;
@@ -38,7 +39,10 @@ const styles = StyleSheet.create({
     flex: 1,
     alignItems: 'center',
     justifyContent: 'center',
-    height: 55,
+    height: 30,
+  },
+  emptyDay: {
+    flex: 1,
   },
   textMonth: {
     fontSize: 25,
@@ -84,12 +88,14 @@ export default class Calendar extends React.Component<CalendarProps, any> {
   }
 
   getDaysWithEmpty() {
-    const firstDayOfMonth = moment(this.props.selectedDate).startOf('month');
-    const lastDayOfMonth = moment(this.props.selectedDate).endOf('month');
+    const { displayedDate } = this.props;
+
+    const firstDayOfMonth = moment(displayedDate).startOf('month');
+    const lastDayOfMonth = moment(displayedDate).endOf('month');
 
     const emptyBeginningDays = Array(firstDayOfMonth.day()).fill(0);
     const emptyEndDays = Array(6 - lastDayOfMonth.day()).fill(0);
-    const daysInBetween = Array(this.props.selectedDate.daysInMonth())
+    const daysInBetween = Array(displayedDate.daysInMonth())
       .fill('')
       .map((_, index) => index + 1);
 
@@ -104,17 +110,22 @@ export default class Calendar extends React.Component<CalendarProps, any> {
     this.props.onForward();
   }
 
-  pressDate(day: number) {
-    this.props.onPressDate(day);
+  pressDate(date: Moment) {
+    this.props.onPressDate(date);
   }
 
   renderWeek(days: number[]) {
+    const { selectedDate, displayedDate } = this.props;
     const mappedDays = days.map((day: number) => (
-      <Day
-        day={day}
-        selected={this.props.selectedDate.date() === day}
+      day ? <Day
+        date={moment(displayedDate.set('date', day))}
+        selected={
+          selectedDate.month() === displayedDate.month() &&
+          selectedDate.year() === displayedDate.year() &&
+          selectedDate.date() === day
+        }
         onPress={this.pressDate}
-      />
+      /> : <View style={styles.emptyDay}/>
     ));
 
     return <View style={styles.weekDays}>{mappedDays}</View>;
@@ -124,7 +135,7 @@ export default class Calendar extends React.Component<CalendarProps, any> {
     return (
       <View style={styles.header}>
         <Text style={styles.textMonth}>
-          {this.props.selectedDate.format('MMMM YYYY')}
+          {this.props.displayedDate.format('MMMM YYYY')}
         </Text>
         <View style={styles.arrows}>
           <Pressable onPress={this.back}>
