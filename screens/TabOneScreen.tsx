@@ -15,6 +15,7 @@ export default class TabOneScreen extends React.Component<any, State> {
 
     this.back = this.back.bind(this);
     this.forward = this.forward.bind(this);
+    this.pressDate = this.pressDate.bind(this);
   }
 
   back() {
@@ -26,8 +27,14 @@ export default class TabOneScreen extends React.Component<any, State> {
   }
 
   forward() {
-    this.setState((prevState) => ({
+    this.setState((prevState: State) => ({
       selectedDate: prevState.selectedDate.add(1, 'months').startOf('month'),
+    }));
+  }
+
+  pressDate(day: number) {
+    this.setState((prevState: State) => ({
+      selectedDate: prevState.selectedDate.set('date', day),
     }));
   }
 
@@ -37,6 +44,7 @@ export default class TabOneScreen extends React.Component<any, State> {
         selectedDate={this.state.selectedDate}
         onBack={this.back}
         onForward={this.forward}
+        onPressDate={this.pressDate}
       />
     );
   }
