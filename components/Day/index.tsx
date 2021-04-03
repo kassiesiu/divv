@@ -3,7 +3,7 @@ import React from 'react';
 import { Pressable, StyleSheet } from 'react-native';
 import { Text, View } from '../Themed';
 
-interface DayProps {
+interface Props {
   date: Moment;
   selected: boolean;
   onPress: Function;
@@ -17,7 +17,7 @@ const styles = StyleSheet.create({
     height: 55,
   },
   selected: {
-    backgroundColor: 'red',
+    backgroundColor: '#FFE400',
     borderRadius: 15,
     width: 30,
     height: 30,
@@ -26,8 +26,8 @@ const styles = StyleSheet.create({
   },
 });
 
-export default class Day extends React.Component<DayProps, any> {
-  constructor(props: DayProps) {
+export default class Day extends React.Component<Props, any> {
+  constructor(props: Props) {
     super(props);
 
     this.press = this.press.bind(this);

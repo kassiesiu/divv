@@ -5,8 +5,9 @@ import { StyleSheet } from 'react-native';
 import { Text, View } from '../Themed';
 import Day from '../Day';
 import Arrows from '../Arrows';
+import WeekHeader from '../WeekHeader';
 
-interface CalendarProps {
+interface Props {
   selectedDate: Moment;
   displayedDate: Moment;
   onBack: Function;
@@ -15,24 +16,15 @@ interface CalendarProps {
 }
 
 const styles = StyleSheet.create({
-  container: {
-    width: '100%',
-    padding: 10,
-  },
   header: {
+    padding: 15,
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
   },
-  weekDays: {
+  week: {
     flexDirection: 'row',
     justifyContent: 'space-between',
-  },
-  weekDay: {
-    flex: 1,
-    alignItems: 'center',
-    justifyContent: 'center',
-    height: 30,
   },
   emptyDay: {
     flex: 1,
@@ -43,8 +35,8 @@ const styles = StyleSheet.create({
   },
 });
 
-export default class Calendar extends React.Component<CalendarProps, any> {
-  constructor(props: CalendarProps) {
+export default class Calendar extends React.Component<Props, any> {
+  constructor(props: Props) {
     super(props);
 
     this.back = this.back.bind(this);
@@ -52,35 +44,7 @@ export default class Calendar extends React.Component<CalendarProps, any> {
     this.pressDate = this.pressDate.bind(this);
   }
 
-  static renderWeekHeader() {
-    return (
-      <View style={styles.weekDays}>
-        <View style={styles.weekDay}>
-          <Text>Sun</Text>
-        </View>
-        <View style={styles.weekDay}>
-          <Text>Mon</Text>
-        </View>
-        <View style={styles.weekDay}>
-          <Text>Tue</Text>
-        </View>
-        <View style={styles.weekDay}>
-          <Text>Wed</Text>
-        </View>
-        <View style={styles.weekDay}>
-          <Text>Thu</Text>
-        </View>
-        <View style={styles.weekDay}>
-          <Text>Fri</Text>
-        </View>
-        <View style={styles.weekDay}>
-          <Text>Sat</Text>
-        </View>
-      </View>
-    );
-  }
-
-  getDaysWithEmpty() {
+  getDaysWithEmpty(): number[] {
     const { displayedDate } = this.props;
 
     const firstDayOfMonth = moment(displayedDate).startOf('month');
@@ -107,6 +71,17 @@ export default class Calendar extends React.Component<CalendarProps, any> {
     this.props.onPressDate(date);
   }
 
+  renderHeader() {
+    return (
+      <View style={styles.header}>
+        <Text style={styles.textMonth}>
+          {this.props.displayedDate.format('MMMM YYYY')}
+        </Text>
+        <Arrows onBack={this.back} onForward={this.forward} />
+      </View>
+    );
+  }
+
   renderWeek(days: number[]) {
     const { selectedDate, displayedDate } = this.props;
     const mappedDays = days.map((day: number) =>
@@ -125,18 +100,7 @@ export default class Calendar extends React.Component<CalendarProps, any> {
       )
     );
 
-    return <View style={styles.weekDays}>{mappedDays}</View>;
-  }
-
-  renderHeader() {
-    return (
-      <View style={styles.header}>
-        <Text style={styles.textMonth}>
-          {this.props.displayedDate.format('MMMM YYYY')}
-        </Text>
-        <Arrows onBack={this.back} onForward={this.forward} />
-      </View>
-    );
+    return <View style={styles.week}>{mappedDays}</View>;
   }
 
   renderWeeks() {
@@ -152,13 +116,9 @@ export default class Calendar extends React.Component<CalendarProps, any> {
 
   render() {
     return (
-      <GestureRecognizer
-        style={styles.container}
-        onSwipeRight={this.back}
-        onSwipeLeft={this.forward}
-      >
+      <GestureRecognizer onSwipeRight={this.back} onSwipeLeft={this.forward}>
         {this.renderHeader()}
-        {Calendar.renderWeekHeader()}
+        <WeekHeader />
         {this.renderWeeks()}
       </GestureRecognizer>
     );

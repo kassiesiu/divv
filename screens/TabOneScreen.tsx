@@ -1,12 +1,18 @@
 import React from 'react';
 import moment, { Moment } from 'moment';
+import { SafeAreaView } from 'react-native-safe-area-context';
+import { StyleSheet } from 'react-native';
+import { Text } from '../components/Themed';
 import Calendar from '../components/Calendar';
-import { Text, View } from '../components/Themed';
 
 interface State {
   selectedDate: Moment;
   displayedDate: Moment;
 }
+
+const styles = StyleSheet.create({
+  container: { flex: 1, padding: 10, backgroundColor: 'white' },
+});
 
 export default class TabOneScreen extends React.Component<any, State> {
   constructor(props: any) {
@@ -41,7 +47,7 @@ export default class TabOneScreen extends React.Component<any, State> {
 
   render() {
     return (
-      <View>
+      <SafeAreaView style={styles.container}>
         <Calendar
           selectedDate={this.state.selectedDate}
           displayedDate={this.state.displayedDate}
@@ -53,7 +59,7 @@ export default class TabOneScreen extends React.Component<any, State> {
           Selected Date:
           {this.state.selectedDate.format('MM/DD/YYYY')}
         </Text>
-      </View>
+      </SafeAreaView>
     );
   }
 }
