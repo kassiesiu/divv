@@ -1,24 +1,16 @@
 import * as React from 'react';
+import moment from 'moment';
+
 import { StyleSheet } from 'react-native';
+import { SafeAreaView } from 'react-native-safe-area-context';
 
-import EditScreenInfo from '../components/EditScreenInfo';
-import { Text, View } from '../components/Themed';
-
-export default function TabOneScreen() {
-  return (
-    <View style={styles.container}>
-      <Text style={styles.title}>Tab One</Text>
-      <View style={styles.separator} lightColor="#eee" darkColor="rgba(255,255,255,0.1)" />
-      <EditScreenInfo path="/screens/TabOneScreen.tsx" />
-    </View>
-  );
-}
+import Calendar from '../components/Calendar';
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
     alignItems: 'center',
-    justifyContent: 'center',
+    padding: 10,
   },
   title: {
     fontSize: 20,
@@ -30,3 +22,11 @@ const styles = StyleSheet.create({
     width: '80%',
   },
 });
+
+export default function TabOneScreen() {
+  return (
+    <SafeAreaView style={styles.container}>
+      <Calendar selectedDate={moment()} onBack={() => {}} onForward={() => {}} />
+    </SafeAreaView>
+  );
+}
