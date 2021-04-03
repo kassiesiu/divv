@@ -3,6 +3,7 @@ import moment, { Moment } from 'moment';
 import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome';
 import { faArrowLeft, faArrowRight } from '@fortawesome/free-solid-svg-icons';
 import { Pressable, StyleSheet } from 'react-native';
+import GestureRecognizer from 'react-native-swipe-gestures';
 import { Text, View } from '../Themed';
 
 interface CalendarProps {
@@ -43,6 +44,13 @@ const styles = StyleSheet.create({
 });
 
 export default class Calendar extends React.Component<CalendarProps, any> {
+  constructor(props: CalendarProps) {
+    super(props);
+
+    this.back = this.back.bind(this);
+    this.forward = this.forward.bind(this);
+  }
+
   getDaysWithEmpty() {
     const daysInMonth = this.props.selectedDate.daysInMonth();
     const firstDayOfMonth = moment(this.props.selectedDate).startOf('month');
@@ -112,12 +120,12 @@ export default class Calendar extends React.Component<CalendarProps, any> {
   }
 
   static renderWeek(days: number[]) {
-    const mappedDays = days.map((day: number, index: number) => {
+    const mappedDays = days.map((day: number) => {
       if (!day) {
-        return <View style={styles.day} key={index} />;
+        return <View style={styles.day} />;
       }
       return (
-        <View style={styles.day} key={index}>
+        <View style={styles.day}>
           <Text>{day}</Text>
         </View>
       );
@@ -139,11 +147,15 @@ export default class Calendar extends React.Component<CalendarProps, any> {
 
   render() {
     return (
-      <View style={styles.container}>
+      <GestureRecognizer
+        style={styles.container}
+        onSwipeLeft={this.back}
+        onSwipeRight={this.forward}
+      >
         {this.renderHeader()}
         {Calendar.renderWeekHeader()}
         {this.renderWeeks()}
-      </View>
+      </GestureRecognizer>
     );
   }
 }

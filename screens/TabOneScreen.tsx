@@ -1,32 +1,43 @@
-import * as React from 'react';
-import moment from 'moment';
-
-import { StyleSheet } from 'react-native';
-import { SafeAreaView } from 'react-native-safe-area-context';
-
+import React from 'react';
+import moment, { Moment } from 'moment';
 import Calendar from '../components/Calendar';
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    alignItems: 'center',
-    padding: 10,
-  },
-  title: {
-    fontSize: 20,
-    fontWeight: 'bold',
-  },
-  separator: {
-    marginVertical: 30,
-    height: 1,
-    width: '80%',
-  },
-});
+interface State {
+  selectedDate: Moment;
+}
 
-export default function TabOneScreen() {
-  return (
-    <SafeAreaView style={styles.container}>
-      <Calendar selectedDate={moment()} onBack={() => {}} onForward={() => {}} />
-    </SafeAreaView>
-  );
+export default class TabOneScreen extends React.Component<any, State> {
+  constructor(props: any) {
+    super(props);
+    this.state = {
+      selectedDate: moment(),
+    };
+
+    this.back = this.back.bind(this);
+    this.forward = this.forward.bind(this);
+  }
+
+  back() {
+    this.setState((prevState) => ({
+      selectedDate: prevState.selectedDate
+        .subtract(1, 'months')
+        .startOf('month'),
+    }));
+  }
+
+  forward() {
+    this.setState((prevState) => ({
+      selectedDate: prevState.selectedDate.add(1, 'months').startOf('month'),
+    }));
+  }
+
+  render() {
+    return (
+      <Calendar
+        selectedDate={this.state.selectedDate}
+        onBack={this.back}
+        onForward={this.forward}
+      />
+    );
+  }
 }
