@@ -44,6 +44,6 @@ export default class Day extends React.Component<DayProps, any> {
           <Text>{this.props.date.date()}</Text>
         </View>
       </Pressable>
-    )
+    );
   }
 }

@@ -1,11 +1,10 @@
-import { faArrowLeft, faArrowRight } from '@fortawesome/free-solid-svg-icons';
-import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome';
 import moment, { Moment } from 'moment';
 import React from 'react';
-import { Pressable, StyleSheet } from 'react-native';
 import GestureRecognizer from 'react-native-swipe-gestures';
-import Day from '../Day';
+import { StyleSheet } from 'react-native';
 import { Text, View } from '../Themed';
+import Day from '../Day';
+import Arrows from '../Arrows';
 
 interface CalendarProps {
   selectedDate: Moment;
@@ -24,12 +23,6 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
-  },
-  arrows: {
-    flexDirection: 'row',
-  },
-  arrowLeft: {
-    marginRight: 20,
   },
   weekDays: {
     flexDirection: 'row',
@@ -116,17 +109,21 @@ export default class Calendar extends React.Component<CalendarProps, any> {
 
   renderWeek(days: number[]) {
     const { selectedDate, displayedDate } = this.props;
-    const mappedDays = days.map((day: number) => (
-      day ? <Day
-        date={moment(displayedDate.set('date', day))}
-        selected={
-          selectedDate.month() === displayedDate.month() &&
-          selectedDate.year() === displayedDate.year() &&
-          selectedDate.date() === day
-        }
-        onPress={this.pressDate}
-      /> : <View style={styles.emptyDay}/>
-    ));
+    const mappedDays = days.map((day: number) =>
+      day ? (
+        <Day
+          date={moment(displayedDate.set('date', day))}
+          selected={
+            selectedDate.month() === displayedDate.month() &&
+            selectedDate.year() === displayedDate.year() &&
+            selectedDate.date() === day
+          }
+          onPress={this.pressDate}
+        />
+      ) : (
+        <View style={styles.emptyDay} />
+      )
+    );
 
     return <View style={styles.weekDays}>{mappedDays}</View>;
   }
@@ -137,14 +134,7 @@ export default class Calendar extends React.Component<CalendarProps, any> {
         <Text style={styles.textMonth}>
           {this.props.displayedDate.format('MMMM YYYY')}
         </Text>
-        <View style={styles.arrows}>
-          <Pressable onPress={this.back}>
-            <FontAwesomeIcon style={styles.arrowLeft} icon={faArrowLeft} />
-          </Pressable>
-          <Pressable onPress={this.forward}>
-            <FontAwesomeIcon icon={faArrowRight} />
-          </Pressable>
-        </View>
+        <Arrows onBack={this.back} onForward={this.forward} />
       </View>
     );
   }
