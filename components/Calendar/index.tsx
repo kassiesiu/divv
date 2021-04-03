@@ -34,7 +34,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-between',
   },
-  day: {
+  weekDay: {
     flex: 1,
     alignItems: 'center',
     justifyContent: 'center',
@@ -58,25 +58,25 @@ export default class Calendar extends React.Component<CalendarProps, any> {
   static renderWeekHeader() {
     return (
       <View style={styles.weekDays}>
-        <View style={styles.day}>
+        <View style={styles.weekDay}>
           <Text>Sun</Text>
         </View>
-        <View style={styles.day}>
+        <View style={styles.weekDay}>
           <Text>Mon</Text>
         </View>
-        <View style={styles.day}>
+        <View style={styles.weekDay}>
           <Text>Tue</Text>
         </View>
-        <View style={styles.day}>
+        <View style={styles.weekDay}>
           <Text>Wed</Text>
         </View>
-        <View style={styles.day}>
+        <View style={styles.weekDay}>
           <Text>Thu</Text>
         </View>
-        <View style={styles.day}>
+        <View style={styles.weekDay}>
           <Text>Fri</Text>
         </View>
-        <View style={styles.day}>
+        <View style={styles.weekDay}>
           <Text>Sat</Text>
         </View>
       </View>
@@ -109,19 +109,13 @@ export default class Calendar extends React.Component<CalendarProps, any> {
   }
 
   renderWeek(days: number[]) {
-    const mappedDays = days.map((day: number) => {
-      if (!day) {
-        return <View style={styles.day} />;
-      }
-
-      return (
-        <Day
-          day={day}
-          selected={this.props.selectedDate.date() === day}
-          onPress={this.pressDate}
-        />
-      );
-    });
+    const mappedDays = days.map((day: number) => (
+      <Day
+        day={day}
+        selected={this.props.selectedDate.date() === day}
+        onPress={this.pressDate}
+      />
+    ));
 
     return <View style={styles.weekDays}>{mappedDays}</View>;
   }

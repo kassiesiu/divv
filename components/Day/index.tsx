@@ -1,6 +1,6 @@
 import React from 'react';
 import { Pressable, StyleSheet } from 'react-native';
-import { Text } from '../Themed';
+import { Text, View } from '../Themed';
 
 interface DayProps {
   day: number;
@@ -16,7 +16,12 @@ const styles = StyleSheet.create({
     height: 55,
   },
   selected: {
-    color: 'red',
+    backgroundColor: 'red',
+    borderRadius: 15,
+    width: 30,
+    height: 30,
+    justifyContent: 'center',
+    alignItems: 'center',
   },
 });
 
@@ -32,12 +37,14 @@ export default class Day extends React.Component<DayProps, any> {
   }
 
   render() {
-    return (
-      <Pressable style={[styles.day]} onPress={this.press}>
-        <Text style={this.props.selected && styles.selected}>
-          {this.props.day}
-        </Text>
+    return this.props.day ? (
+      <Pressable style={styles.day} onPress={this.press}>
+        <View style={this.props.selected && styles.selected}>
+          <Text>{this.props.day}</Text>
+        </View>
       </Pressable>
+    ) : (
+      <View style={styles.day} />
     );
   }
 }
