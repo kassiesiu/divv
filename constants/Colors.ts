@@ -16,4 +16,5 @@ export default {
     tabIconDefault: '#ccc',
     tabIconSelected: tintColorDark,
   },
+  accentColor: '#FFE400',
 };

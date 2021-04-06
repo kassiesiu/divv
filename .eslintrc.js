@@ -4,7 +4,9 @@ module.exports = {
     node: true,
     jest: true,
   },
-
+  globals: {
+    fetch: false,
+  },
   extends: ['plugin:react/recommended', 'airbnb', 'prettier'],
   parser: '@typescript-eslint/parser',
   parserOptions: {

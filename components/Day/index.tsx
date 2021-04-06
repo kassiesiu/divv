@@ -1,6 +1,7 @@
 import { Moment } from 'moment';
 import React from 'react';
 import { Pressable, StyleSheet } from 'react-native';
+import Colors from '../../constants/Colors';
 import { Text, View } from '../Themed';
 
 interface Props {
@@ -17,7 +18,7 @@ const styles = StyleSheet.create({
     height: 55,
   },
   selected: {
-    backgroundColor: '#FFE400',
+    backgroundColor: Colors.accentColor,
     borderRadius: 15,
     width: 30,
     height: 30,
